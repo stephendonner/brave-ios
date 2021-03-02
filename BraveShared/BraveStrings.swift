@@ -1003,6 +1003,12 @@ extension Strings {
                               value: "Playlist",
                               comment: "Title For the Section that videos are listed")
         
+        public static let playListMediaPlayerTitle =
+            NSLocalizedString("playList.playListMediaPlayerTitle",
+                              bundle: .braveShared,
+                              value: "Media Player",
+                              comment: "Navigation Bar title for Video Player in iPad")
+        
         public static let clearActionButtonTitle =
             NSLocalizedString("playList.clearActionButtonTitle",
                               bundle: .braveShared,
