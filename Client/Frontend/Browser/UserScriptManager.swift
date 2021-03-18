@@ -303,7 +303,7 @@ class UserScriptManager {
                 $0.addUserScript(script)
             }
             
-            if isWebCompatibilityMediaSourceAPIEnabled, let script = PlaylistSwizzlerScript {
+            if UIDevice.isIpad, isWebCompatibilityMediaSourceAPIEnabled, let script = PlaylistSwizzlerScript {
                 $0.addUserScript(script)
             }
             
