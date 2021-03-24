@@ -28,11 +28,7 @@ class BraveRewardsSettingsViewController: TableViewController {
         fatalError()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        title = Strings.braveRewardsTitle
-        
+    private func reloadSections() {
         dataSource.sections = [
             .init(
                 rows: [
@@ -68,17 +64,29 @@ class BraveRewardsSettingsViewController: TableViewController {
             })
         }
         
-        rewards.ledger.rewardsInternalInfo { info in
-            if let info = info, !info.paymentId.isEmpty {
-                dataSource.sections += [
-                    Section(rows: [
-                        Row(text: Strings.RewardsInternals.title, selection: {
-                            let controller = RewardsInternalsViewController(ledger: self.rewards.ledger, legacyLedger: self.legacyWallet)
-                            self.navigationController?.pushViewController(controller, animated: true)
-                        }, accessory: .disclosureIndicator)
-                    ])
-                ]
+        if let ledger = rewards.ledger {
+            ledger.rewardsInternalInfo { info in
+                if let info = info, !info.paymentId.isEmpty {
+                    dataSource.sections += [
+                        Section(rows: [
+                            Row(text: Strings.RewardsInternals.title, selection: {
+                                let controller = RewardsInternalsViewController(ledger: ledger, legacyLedger: self.legacyWallet)
+                                self.navigationController?.pushViewController(controller, animated: true)
+                            }, accessory: .disclosureIndicator)
+                        ])
+                    ]
+                }
             }
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        title = Strings.braveRewardsTitle
+        
+        rewards.startLedgerService { [weak self] in
+            self?.reloadSections()
         }
     }
 }

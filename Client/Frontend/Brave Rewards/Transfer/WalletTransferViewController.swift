@@ -42,7 +42,7 @@ class WalletTransferViewController: UIViewController, Themeable {
         transferView.cameraView.scanCallback = { [weak self] paymentId in
             guard let self = self, !paymentId.isEmpty, !self.isTransferring else { return }
             self.isTransferring = true
-            self.legacyWallet.linkBraveWallet(paymentId: paymentId) { [weak self] result in
+            self.legacyWallet.linkBraveWallet(paymentId: paymentId) { [weak self] result, _ in
                 guard let self = self else { return }
                 if result != .ledgerOk {
                     let alert = UIAlertController(title: Strings.Rewards.walletTransferFailureAlertTitle, message: "\(Strings.Rewards.walletTransferFailureAlertMessage) (\(result.rawValue))", preferredStyle: .alert)

@@ -27,7 +27,7 @@ extension BraveRewards {
             Preferences.Rewards.rewardsToggledOnce.value = true
             createWalletIfNeeded { [weak self] in
                 guard let self = self else { return }
-                self.ledger.isAutoContributeEnabled = newValue
+                self.ledger?.isAutoContributeEnabled = newValue
                 self.isAdsEnabled = newValue
                 self.didChangeValue(for: \.isEnabled)
             }
@@ -40,9 +40,12 @@ extension BraveRewards {
             return
         }
         isCreatingWallet = true
-        ledger.createWalletAndFetchDetails { [weak self] success in
-            self?.isCreatingWallet = false
-            completion?()
+        startLedgerService {
+            guard let ledger = self.ledger else { return }
+            ledger.createWalletAndFetchDetails { [weak self] success in
+                self?.isCreatingWallet = false
+                completion?()
+            }
         }
     }
     
