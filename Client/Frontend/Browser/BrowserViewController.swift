@@ -2495,7 +2495,6 @@ extension BrowserViewController: ToolbarDelegate {
         }
     }
     
-    @available(iOS 13.0, *)
     func featuresMenuSection(_ menuController: NewMenuController) -> some View {
         VStack(spacing: 0) {
             VPNMenuButton(icon: #imageLiteral(resourceName: "vpn_menu_icon").template, title: "Brave VPN", vpnProductInfo: self.vpnProductInfo) { vc in
@@ -2506,7 +2505,6 @@ extension BrowserViewController: ToolbarDelegate {
         }
     }
     
-    @available(iOS 13.0, *)
     func destinationMenuSection(_ menuController: NewMenuController) -> some View {
         VStack(spacing: 0) {
             MenuItemButton(icon: #imageLiteral(resourceName: "menu_bookmarks").template, title: Strings.bookmarksMenuItem) {
@@ -2531,7 +2529,6 @@ extension BrowserViewController: ToolbarDelegate {
         }
     }
     
-    @available(iOS 13.0, *)
     struct MenuTabDetailsView: View {
         @SwiftUI.Environment(\.colorScheme) var colorScheme: ColorScheme
         var tab: Tab?
@@ -2556,7 +2553,6 @@ extension BrowserViewController: ToolbarDelegate {
         }
     }
     
-    @available(iOS 13.0, *)
     func activitiesMenuSection(_ menuController: NewMenuController, tabURL: URL, activities: [UIActivity]) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             MenuTabDetailsView(tab: tabManager.selectedTab, url: tabURL)
@@ -2582,28 +2578,26 @@ extension BrowserViewController: ToolbarDelegate {
     }
     
     func tabToolbarDidPressMenu(_ tabToolbar: ToolbarProtocol) {
-        if #available(iOS 13.0, *) {
-            let selectedTabURL: URL? = {
-                guard let url = tabManager.selectedTab?.url, !url.isLocal || url.isReaderModeURL else { return nil }
-                return url
-            }()
-            var activities: [UIActivity] = []
-            if let url = selectedTabURL, let tab = tabManager.selectedTab {
-                activities = shareActivities(for: url, tab: tab, sourceView: view, sourceRect: self.view.convert(self.topToolbar.menuButton.frame, from: self.topToolbar.menuButton.superview), arrowDirection: .up)
-            }
-            let menuController = NewMenuController(content: { menuController in
-                VStack(spacing: 6) {
-                    featuresMenuSection(menuController)
-                    Divider()
-                    destinationMenuSection(menuController)
-                    if let tabURL = selectedTabURL {
-                        Divider()
-                        activitiesMenuSection(menuController, tabURL: tabURL, activities: activities)
-                    }
-                }
-            })
-            presentPanModal(menuController, sourceView: tabToolbar.menuButton, sourceRect: tabToolbar.menuButton.bounds)
+        let selectedTabURL: URL? = {
+            guard let url = tabManager.selectedTab?.url, !url.isLocal || url.isReaderModeURL else { return nil }
+            return url
+        }()
+        var activities: [UIActivity] = []
+        if let url = selectedTabURL, let tab = tabManager.selectedTab {
+            activities = shareActivities(for: url, tab: tab, sourceView: view, sourceRect: self.view.convert(self.topToolbar.menuButton.frame, from: self.topToolbar.menuButton.superview), arrowDirection: .up)
         }
+        let menuController = NewMenuController(content: { menuController in
+            VStack(spacing: 6) {
+                featuresMenuSection(menuController)
+                Divider()
+                destinationMenuSection(menuController)
+                if let tabURL = selectedTabURL {
+                    Divider()
+                    activitiesMenuSection(menuController, tabURL: tabURL, activities: activities)
+                }
+            }
+        })
+        presentPanModal(menuController, sourceView: tabToolbar.menuButton, sourceRect: tabToolbar.menuButton.bounds)
     }
     
     func tabToolbarDidPressAddTab(_ tabToolbar: ToolbarProtocol, button: UIButton) {
