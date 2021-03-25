@@ -162,7 +162,7 @@ extension Preferences {
     /// An entry in the `Preferences`
     ///
     /// `ValueType` defines the type of value that will stored in the UserDefaults object
-    public class Option<ValueType: UserDefaultsEncodable & Equatable> {
+    public class Option<ValueType: UserDefaultsEncodable & Equatable>: ObservableObject {
         /// The list of observers for this option
         private let observers = WeakList<PreferencesObserver>()
         /// The UserDefaults container that you wish to save to
@@ -170,7 +170,7 @@ extension Preferences {
         /// The current value of this preference
         ///
         /// Upon setting this value, UserDefaults will be updated and any observers will be called
-        public var value: ValueType {
+        @Published public var value: ValueType {
             didSet {
                 if value == oldValue { return }
                 
