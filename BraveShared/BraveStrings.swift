@@ -1021,6 +1021,12 @@ extension Strings {
                               value: "Okay",
                               comment: "Okay Alert button title")
         
+        public static let reopenButtonTitle =
+            NSLocalizedString("playList.reopenButtonTitle",
+                              bundle: .braveShared,
+                              value: "Reopen",
+                              comment: "Reopen Alert button title")
+        
         public static let sorryAlertTitle =
             NSLocalizedString("playList.sorryAlertTitle",
                               bundle: .braveShared,
@@ -1078,7 +1084,7 @@ extension Strings {
         public static let expiredAlertDescription =
             NSLocalizedString("playList.expiredAlertDescription",
                               bundle: .braveShared,
-                              value: "This video was a live stream or time limit was reached. Re-open in a new tab?",
+                              value: "This video was a live stream or the time limit was reached. Please reopen the link to refresh.",
                               comment: "The description for the alert that shows up when an item is expired")
         
         public static let pictureInPictureErrorTitle =
