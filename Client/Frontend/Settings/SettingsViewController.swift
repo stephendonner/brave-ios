@@ -534,14 +534,17 @@ class SettingsViewController: TableViewController {
 
 extension TableViewController: Themeable {
     func applyTheme(_ theme: Theme) {
-        styleChildren(theme: theme)
-        tableView.reloadData()
-
-        //  View manipulations done via `apperance()` do not impact existing UI, so need to adjust manually
-        // exiting menus, so setting explicitly.
-        navigationController?.navigationBar.tintColor = UINavigationBar.appearance().tintColor
-        navigationController?.navigationBar.barTintColor = UINavigationBar.appearance().appearanceBarTintColor
-        navigationController?.navigationBar.titleTextAttributes =
-            [NSAttributedString.Key.foregroundColor: theme.colors.tints.home]
+        DispatchQueue.main.async { [self] in
+            styleChildren(theme: theme)
+            tableView.reloadData()
+        }
+    }
+    
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
+            updateThemeForUserInterfaceStyleChange()
+            applyTheme(Theme.of(nil))
+        }
     }
 }
